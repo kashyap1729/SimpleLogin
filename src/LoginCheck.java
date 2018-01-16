@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Verify.VerifyRecaptcha;
+import GetToken.GetToken_SEAS;
 
 
 /**
@@ -41,20 +42,24 @@ public class LoginCheck extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String uname = request.getParameter("uname");
 		String password = request.getParameter("password");
-		
 		String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
-		boolean verify1 = VerifyRecaptcha.verify(gRecaptchaResponse);
+		
+		VerifyRecaptcha VerifyOBJ= new VerifyRecaptcha();
+		GetToken_SEAS   SeasOBJ= new GetToken_SEAS();
+		boolean verify1 = VerifyOBJ.verify(gRecaptchaResponse);
 		
 		PrintWriter out = response.getWriter();
 		
-		out.println("Your UserName is : "+uname +" , Your password is : "+password);
+		out.println("Your UserName is : "+uname +" , \n Your password is : "+password);
 		
 		//out.println(gRecaptchaResponse);
 		
 		if (verify1) {
-			out.println("Captcha is correct");
+			
+			String response1 = SeasOBJ.SEAS_Response(uname,password,"Garanti_Bank_User_Auth");
+			out.println("\n\n Response From SEAS is \n\n"+response1);
 		} else {
-			out.println("You missed the Captcha");
+			out.println("\n\nYou missed the Captcha");
 		}
 				
 		/*if (uname.equals("Kashyap") && password.equals("1234"))
