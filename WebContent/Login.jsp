@@ -5,26 +5,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <script src='https://www.google.com/recaptcha/api.js'></script>
-<title>Insert title here</title>
+<title>Garanti Bank Login Page</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 	<form method="post" action="LoginCheck">
-		<table>
-			<tr>
-				<td>User Name</td>
-				<td><input type="text" name="uname" required="required"></td>
-			</tr>
-			<tr>
-				<td>Password</td>
-				<td><input type="password" name="password" required="required" ></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><input type="submit" value="login"></td>
-			</tr>
-		</table>
-		<br> <br><br><br><br><br><br><br><br><br><br><br><br>
-		<div class="g-recaptcha" data-sitekey="6LfFhjYUAAAAAFEHDsXcxU77qf_S4PP8PIWdEN-L"></div>
+	<header>Garanti Bank</header>
+  <label>Username <span>*</span></label>
+  <input type="text" name="uname" required="required">
+  <label>Password <span>*</span></label>
+  <input type="password" name="password" required="required" >
+  <div class="g-recaptcha" data-sitekey="6LfFhjYUAAAAAFEHDsXcxU77qf_S4PP8PIWdEN-L"></div> 
+  <button>Login</button>
 	</form>
 </body>
 </html>

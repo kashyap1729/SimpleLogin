@@ -2,7 +2,6 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -44,6 +43,7 @@ public class LoginCheck extends HttpServlet {
 		String password = request.getParameter("password");
 		String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
 		
+		
 		VerifyRecaptcha VerifyOBJ= new VerifyRecaptcha();
 		GetToken_SEAS   SeasOBJ= new GetToken_SEAS();
 		boolean verify1 = VerifyOBJ.verify(gRecaptchaResponse);
@@ -58,8 +58,12 @@ public class LoginCheck extends HttpServlet {
 			
 			String response1 = SeasOBJ.SEAS_Response(uname,password,"Garanti_Bank_User_Auth");
 			out.println("\n\n Response From SEAS is \n\n"+response1);
+			
+			
+			
 		} else {
-			out.println("\n\nYou missed the Captcha");
+			
+	        out.println("\n\nYou missed the Captcha");
 		}
 				
 		/*if (uname.equals("Kashyap") && password.equals("1234"))
