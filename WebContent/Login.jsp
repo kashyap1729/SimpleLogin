@@ -5,6 +5,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <script src='https://www.google.com/recaptcha/api.js'></script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="JavaScript/JavaScript.js"></script>
+<script>
+var url= getUrlParameter('customReturnUrl');
+</script>
 <title>Garanti Bank Login Page</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -15,7 +20,7 @@
   <input type="text" name="uname" required="required">
   <label>Password <span>*</span></label>
   <input type="password" name="password" required="required" >
-  <div class="g-recaptcha" data-sitekey="6LfFhjYUAAAAAFEHDsXcxU77qf_S4PP8PIWdEN-L"></div> 
+  <div class="g-recaptcha" data-sitekey="6Le070AUAAAAAApEQwCwSS2EmNZSDshtWZhRCzzR"></div> 
   <button>Login</button>
 	</form>
 </body>

@@ -292,7 +292,7 @@ public class GetToken_SEAS {
 		if (responseId != null && (responseId.equals(VALIDATE_TOKEN_RESPONSE) || responseId.endsWith("I"))) {
 			
 			System.out.println("Token : " +msg.getToken());
-			return response;
+			return msg.getToken();
 		} else {
 			if (responseMsg != null)
 				lmsg = responseMsg;
@@ -487,7 +487,7 @@ public class GetToken_SEAS {
 	public  String SEAS_Response(String user ,String password , String authProfile ) {
 
 		GetToken_SEAS sai = null;
-		String response_token=null;
+		String token=null;
 		try {
 			
 			sai = new GetToken_SEAS();
@@ -496,7 +496,7 @@ public class GetToken_SEAS {
         
 			//authenticate and generate token
 			//String token = sai.requestSSOToken("iikonne", "Password01", "authProfile");
-	        response_token = sai.requestSSOToken(user, password, authProfile);
+	        token = sai.requestSSOToken(user, password, authProfile);
 			//boolean validated = sai.validateSSOToken(user, token, false);
 			//System.out.println("Validated : " + validated);
 			
@@ -507,7 +507,7 @@ public class GetToken_SEAS {
 			if (sai != null)
 				sai.disconnect();
 		}
-		return response_token;
+		return token;
 		
 		
 	}

@@ -2,8 +2,12 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
+
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +37,8 @@ public class LoginCheck extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		
 	}
 
 	/**
@@ -42,6 +48,7 @@ public class LoginCheck extends HttpServlet {
 		String uname = request.getParameter("uname");
 		String password = request.getParameter("password");
 		String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+		String urlString ="http://tiublrboaapp037.sciblr.in.ibm.com:31000";
 		
 		
 		VerifyRecaptcha VerifyOBJ= new VerifyRecaptcha();
@@ -50,15 +57,21 @@ public class LoginCheck extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		
-		out.println("Your UserName is : "+uname +" , \n Your password is : "+password);
+		//out.println("Your UserName is : "+uname +" , \n Your password is : "+password);
 		
 		//out.println(gRecaptchaResponse);
 		
 		if (verify1) {
 			
 			String response1 = SeasOBJ.SEAS_Response(uname,password,"Garanti_Bank_User_Auth");
-			out.println("\n\n Response From SEAS is \n\n"+response1);
+			//out.println("\n\n Response From SEAS is \n\n"+response1);
 			
+			response.setHeader("SM_USER",uname);
+			Cookie ssoToken = new Cookie("SSOTOKEN", response1);
+			response.addCookie(ssoToken);
+			response.setStatus(HttpServletResponse.SC_FOUND); //302
+			response.setHeader("Location", urlString);
+			//response.setHeader("Location", request.getParameter("customReturnUrl"));
 			
 			
 		} else {
