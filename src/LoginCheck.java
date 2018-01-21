@@ -1,7 +1,7 @@
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
+
 
 
 
@@ -55,7 +55,7 @@ public class LoginCheck extends HttpServlet {
 		GetToken_SEAS   SeasOBJ= new GetToken_SEAS();
 		boolean verify1 = VerifyOBJ.verify(gRecaptchaResponse);
 		
-		PrintWriter out = response.getWriter();
+		//PrintWriter out = response.getWriter();
 		
 		//out.println("Your UserName is : "+uname +" , \n Your password is : "+password);
 		
@@ -65,29 +65,40 @@ public class LoginCheck extends HttpServlet {
 			
 			String response1 = SeasOBJ.SEAS_Response(uname,password,"Garanti_Bank_User_Auth");
 			//out.println("\n\n Response From SEAS is \n\n"+response1);
-			
+			if (response1==null)
+			{
+			request.setAttribute("errorMessage", "Invalid UserId Or Password");	
+			request.getRequestDispatcher("/Login.jsp").forward(request, response);	
+			}
 			response.setHeader("SM_USER",uname);
 			Cookie ssoToken = new Cookie("SSOTOKEN", response1);
 			response.addCookie(ssoToken);
 			response.setStatus(HttpServletResponse.SC_FOUND); //302
 			response.setHeader("Location", urlString);
-			//response.setHeader("Location", request.getParameter("customReturnUrl"));
+			//response.setHeader("Location", request.getParameter("url"));
 			
 			
 		} else {
 			
-	        out.println("\n\nYou missed the Captcha");
+			
+			//out.println("<script type=\"text/javascript\">");
+			    // out.println("location='Login.jsp';");
+			//response.sendRedirect("Login.jsp");
+			
+			//out.println("<script type=\"text/javascript\">");
+			//   out.println("alert('You Missed the Captcha');");
+			   
+			 //  out.println("</script>");
+			
+			
+			request.setAttribute("errorMessage", "You Missed the Captcha");
+			request.getRequestDispatcher("/Login.jsp").forward(request, response);
+			
+			
+	        
 		}
 				
-		/*if (uname.equals("Kashyap") && password.equals("1234"))
-				{
-			     
-			      response.sendRedirect("Welcome.jsp");
-				}
-		else
-		{
-			response.sendRedirect("Error.jsp");
-		}*/
+		
 	}
 
 }

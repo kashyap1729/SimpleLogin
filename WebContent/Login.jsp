@@ -7,20 +7,23 @@
 <script src='https://www.google.com/recaptcha/api.js'></script>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="JavaScript/JavaScript.js"></script>
-<script>
-var url= getUrlParameter('customReturnUrl');
+<script> 
+
+
 </script>
 <title>Garanti Bank Login Page</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body onload="sendUrlParameters()">
 	<form method="post" action="LoginCheck">
 	<header>Garanti Bank</header>
   <label>Username <span>*</span></label>
-  <input type="text" name="uname" required="required">
+  <input type="text" name="uname" required="required" />
   <label>Password <span>*</span></label>
-  <input type="password" name="password" required="required" >
-  <div class="g-recaptcha" data-sitekey="6Le070AUAAAAAApEQwCwSS2EmNZSDshtWZhRCzzR"></div> 
+  <input type="password" name="password" required="required" />
+  <input type="hidden" name="url" value=""  /> 
+  <div class="g-recaptcha" data-sitekey="6LfFhjYUAAAAAFEHDsXcxU77qf_S4PP8PIWdEN-L"> </div> 
+  <div style="color:red">&nbsp&nbsp&nbsp&nbsp&nbsp${errorMessage}</div>
   <button>Login</button>
 	</form>
 </body>

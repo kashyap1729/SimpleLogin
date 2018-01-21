@@ -298,7 +298,11 @@ public class GetToken_SEAS {
 				lmsg = responseMsg;
 			else
 				lmsg = "Could not authenticate user : " + userId;
-			throw new Exception(lmsg);
+			
+			System.out.println(lmsg);
+			System.out.println("Invalid UserId or Password");
+			
+			return null;
 		}
 	}
 
