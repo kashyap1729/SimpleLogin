@@ -8,5 +8,6 @@ function getUrlParameter(name) {
 function sendUrlParameters() {
 	var urlname =getUrlParameter('customReturnUrl');
 	document.getElementsByName("url")[0].setAttribute("value",urlname);
+	
 }
 

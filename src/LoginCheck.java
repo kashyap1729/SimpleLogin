@@ -1,9 +1,8 @@
 
 
 import java.io.IOException;
-
-
-
+import java.net.URL;
+import java.net.URLConnection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -48,7 +47,8 @@ public class LoginCheck extends HttpServlet {
 		String uname = request.getParameter("uname");
 		String password = request.getParameter("password");
 		String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
-		String urlString ="http://tiublrboaapp037.sciblr.in.ibm.com:31000";
+		//String urlString ="http://tiublrboaapp037.sciblr.in.ibm.com:31000/";
+		String urlString =request.getParameter("url");
 		
 		
 		VerifyRecaptcha VerifyOBJ= new VerifyRecaptcha();
@@ -64,17 +64,28 @@ public class LoginCheck extends HttpServlet {
 		if (verify1) {
 			
 			String response1 = SeasOBJ.SEAS_Response(uname,password,"Garanti_Bank_User_Auth");
+			System.out.println("Quoted token = "+response1);
 			//out.println("\n\n Response From SEAS is \n\n"+response1);
 			if (response1==null)
 			{
-			request.setAttribute("errorMessage", "Invalid UserId Or Password");	
+			request.setAttribute("errorMessage", "Invalid UserId Or Password");
 			request.getRequestDispatcher("/Login.jsp").forward(request, response);	
 			}
+			
+			URL url = new URL(urlString); 
+			URLConnection urlConn = url.openConnection(); 
+			
 			response.setHeader("SM_USER",uname);
 			Cookie ssoToken = new Cookie("SSOTOKEN", response1);
 			response.addCookie(ssoToken);
+			
+			urlConn.setRequestProperty("Cookie", "domain=tiublrboaapp037.sciblr.in.ibm.com; path=/");
+			
 			response.setStatus(HttpServletResponse.SC_FOUND); //302
 			response.setHeader("Location", urlString);
+			
+	        urlConn.setUseCaches(true); 
+            urlConn.connect();
 			//response.setHeader("Location", request.getParameter("url"));
 			
 			

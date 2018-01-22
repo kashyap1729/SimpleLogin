@@ -292,7 +292,7 @@ public class GetToken_SEAS {
 		if (responseId != null && (responseId.equals(VALIDATE_TOKEN_RESPONSE) || responseId.endsWith("I"))) {
 			
 			System.out.println("Token : " +msg.getToken());
-			return msg.getToken();
+			return ('"'+msg.getToken()+'"');
 		} else {
 			if (responseMsg != null)
 				lmsg = responseMsg;

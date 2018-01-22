@@ -22,7 +22,7 @@
   <label>Password <span>*</span></label>
   <input type="password" name="password" required="required" />
   <input type="hidden" name="url" value=""  /> 
-  <div class="g-recaptcha" data-sitekey="6LfFhjYUAAAAAFEHDsXcxU77qf_S4PP8PIWdEN-L"> </div> 
+  <div class="g-recaptcha" data-sitekey="6Le070AUAAAAAApEQwCwSS2EmNZSDshtWZhRCzzR"> </div> 
   <div style="color:red">&nbsp&nbsp&nbsp&nbsp&nbsp${errorMessage}</div>
   <button>Login</button>
 	</form>
