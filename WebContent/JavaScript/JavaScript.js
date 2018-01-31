@@ -6,6 +6,7 @@ function getUrlParameter(name) {
 }
 
 function sendUrlParameters() {
+	//window.location.replace("http://tiublrboaapp037.sciblr.in.ibm.com:31000/myfilegateway");
 	var urlname =getUrlParameter('customReturnUrl');
 	document.getElementsByName("url")[0].setAttribute("value",urlname);
 	

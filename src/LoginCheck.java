@@ -1,8 +1,11 @@
 
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -36,6 +39,7 @@ public class LoginCheck extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
+	
 		
 		
 	}
@@ -46,46 +50,62 @@ public class LoginCheck extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String uname = request.getParameter("uname");
 		String password = request.getParameter("password");
-		String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
-		//String urlString ="http://tiublrboaapp037.sciblr.in.ibm.com:31000/";
-		String urlString =request.getParameter("url");
+		//String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+		String urlString ="http://tiublrboaapp037.sciblr.in.ibm.com:31000/myfilegateway";
+		//String urlString =request.getParameter("url");
 		
 		
-		VerifyRecaptcha VerifyOBJ= new VerifyRecaptcha();
+		//VerifyRecaptcha VerifyOBJ= new VerifyRecaptcha();
 		GetToken_SEAS   SeasOBJ= new GetToken_SEAS();
-		boolean verify1 = VerifyOBJ.verify(gRecaptchaResponse);
+		//boolean verify1 = VerifyOBJ.verify(gRecaptchaResponse);
 		
-		//PrintWriter out = response.getWriter();
 		
-		//out.println("Your UserName is : "+uname +" , \n Your password is : "+password);
 		
-		//out.println(gRecaptchaResponse);
-		
-		if (verify1) {
+		if (true) {
 			
 			String response1 = SeasOBJ.SEAS_Response(uname,password,"Garanti_Bank_User_Auth");
 			System.out.println("Quoted token = "+response1);
-			//out.println("\n\n Response From SEAS is \n\n"+response1);
 			if (response1==null)
 			{
-			request.setAttribute("errorMessage", "Invalid UserId Or Password");
-			request.getRequestDispatcher("/Login.jsp").forward(request, response);	
+			//request.setAttribute("errorMessage", "Invalid UserId Or Password");
+			
+			/* PrintWriter out=response.getWriter();
+			  out.println("<script type=\"text/javascript\">");
+		       out.println("alert('User or password incorrect');");
+		       out.println("</script>");*/
+		       
+		       response.setHeader("Location",urlString); 
+			
+			//request.getRequestDispatcher("/Login.jsp").forward(request, response);
+			
 			}
 			
-			URL url = new URL(urlString); 
-			URLConnection urlConn = url.openConnection(); 
+			//  URL url = new URL(urlString); 
+			//  HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
+			  
+		
+			 
 			
 			response.setHeader("SM_USER",uname);
 			Cookie ssoToken = new Cookie("SSOTOKEN", response1);
+			
+			ssoToken.setDomain("sciblr.in.ibm.com");
+			ssoToken.setVersion(1);
+			ssoToken.setPath("/");
+			ssoToken.setMaxAge(-1);  //cookie is deleted when the browser is closed ?
+			ssoToken.setHttpOnly(true);
+			
+			//ssoToken.setSecure(true); //allows only over secure connection( allows cookie to send to SSP)
+			
 			response.addCookie(ssoToken);
 			
-			urlConn.setRequestProperty("Cookie", "domain=tiublrboaapp037.sciblr.in.ibm.com; path=/");
+			
 			
 			response.setStatus(HttpServletResponse.SC_FOUND); //302
 			response.setHeader("Location", urlString);
 			
-	        urlConn.setUseCaches(true); 
-            urlConn.connect();
+	        // urlConn.setUseCaches(true); 
+            //  urlConn.connect();
 			//response.setHeader("Location", request.getParameter("url"));
 			
 			
