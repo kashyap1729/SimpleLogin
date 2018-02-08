@@ -1,10 +1,7 @@
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
+
 
 
 import javax.servlet.ServletException;
@@ -51,21 +48,32 @@ public class LoginCheck extends HttpServlet {
 		String uname = request.getParameter("uname");
 		String password = request.getParameter("password");
 		//String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
-		String urlString ="http://tiublrboaapp037.sciblr.in.ibm.com:31000/myfilegateway";
-		//String urlString =request.getParameter("url");
+		//String urlString ="https://tiublrboaapp037.sciblr.in.ibm.com:31000/myfilegateway";
+		String urlString =request.getParameter("url");
 		
 		
 		//VerifyRecaptcha VerifyOBJ= new VerifyRecaptcha();
-		GetToken_SEAS   SeasOBJ= new GetToken_SEAS();
+		GetToken_SEAS   SeasOBJ = null;
+		String token = null;
 		//boolean verify1 = VerifyOBJ.verify(gRecaptchaResponse);
 		
 		
 		
 		if (true) {
 			
-			String response1 = SeasOBJ.SEAS_Response(uname,password,"Garanti_Bank_User_Auth");
-			System.out.println("Quoted token = "+response1);
-			if (response1==null)
+			  SeasOBJ= new GetToken_SEAS();
+			try {
+				SeasOBJ.connect();
+				token = SeasOBJ.requestSSOToken(uname,password,"Garanti_Bank_User_Auth");
+				System.out.println("Token : "+token);
+			} catch (Throwable t) {
+				// TODO Auto-generated catch block
+				t.printStackTrace();
+			} finally {
+				if (SeasOBJ != null)
+					SeasOBJ.disconnect();
+			}
+			if (token==null)
 			{
 			//request.setAttribute("errorMessage", "Invalid UserId Or Password");
 			
@@ -87,7 +95,7 @@ public class LoginCheck extends HttpServlet {
 			 
 			
 			response.setHeader("SM_USER",uname);
-			Cookie ssoToken = new Cookie("SSOTOKEN", response1);
+			Cookie ssoToken = new Cookie("SSOTOKEN", token);
 			
 			ssoToken.setDomain("sciblr.in.ibm.com");
 			ssoToken.setVersion(1);
@@ -95,12 +103,11 @@ public class LoginCheck extends HttpServlet {
 			ssoToken.setMaxAge(-1);  //cookie is deleted when the browser is closed ?
 			ssoToken.setHttpOnly(true);
 			
-			//ssoToken.setSecure(true); //allows only over secure connection( allows cookie to send to SSP)
+			
+			
+			ssoToken.setSecure(true); //allows only over secure connection( allows cookie to send to SSP)
 			
 			response.addCookie(ssoToken);
-			
-			
-			
 			response.setStatus(HttpServletResponse.SC_FOUND); //302
 			response.setHeader("Location", urlString);
 			

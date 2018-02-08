@@ -151,33 +151,33 @@ public class GetToken_SEAS {
 		// Load security.properties but don't check for FIPS
 		SecurityProperties.load(false);
 
-		/*props.setProperty(SslInfo.KEY_STORE_FILE,
-				"C:\\SEAS2430-20170519-MAINT-BUILD104\\conf\\system\\keystore");
+		//props.setProperty(SslInfo.KEY_STORE_FILE,"C:\\Program Files\\apache-tomcat-8.0.32\\certificate_browser\\myKeyStore");
+		props.setProperty(SslInfo.KEY_STORE_FILE,"/home/kdas/apache-tomcat-8.5.24/certificate_browser/myKeyStore");
 		props.setProperty(SslInfo.KEY_STORE_PASSWORD, "password");
-		props.setProperty(SslInfo.TRUST_STORE_FILE,
-				"C:\\SEAS2430-20170519-MAINT-BUILD104\\conf\\system\\truststore");
-		props.setProperty(SslInfo.TRUST_STORE_PASSWORD, "changeit");
-		props.setProperty(SslInfo.TRUST_STORE_TYPE, "JKS");
+		//props.setProperty(SslInfo.TRUST_STORE_FILE,"C:\\Program Files\\apache-tomcat-8.0.32\\certificate_seas\\myTrustStore");
+		props.setProperty(SslInfo.TRUST_STORE_FILE,"/home/kdas/apache-tomcat-8.5.24/certificate_seas/myTrustStore");
+		props.setProperty(SslInfo.TRUST_STORE_PASSWORD, "password");
 		props.setProperty(SslInfo.KEY_STORE_TYPE, "JKS");
-		props.setProperty(SslInfo.CLIENT_ALIAS, "mvince16");
-		props.setProperty(SslInfo.SERVER_ALIAS, "mvince16");
+		props.setProperty(SslInfo.TRUST_STORE_TYPE, "JKS");
+		props.setProperty(SslInfo.CLIENT_ALIAS, "1");
+		props.setProperty(SslInfo.SERVER_ALIAS, "seaskeycert");
 		
-		props.setProperty(SslInfo.PROTOCOL, "TLSv1.2");
-		props.setProperty("SEAS-HOST", "iikonne");
+		props.setProperty(SslInfo.PROTOCOL, "TLSv1");
+		props.setProperty("SEAS-HOST", "9.109.116.190");
 		props.setProperty("SEAS-PORT", "61366");
-		props.setProperty(SslInfo.CIPHER_SUITES,
-				"TLS_RSA_WITH_AES_128_CBC_SHA TLS_RSA_WITH_3DES_EDE_CBC_SHA");
-
+	    props.setProperty(SslInfo.CIPHER_SUITES,"TLS_RSA_WITH_AES_128_CBC_SHA");
 		// enable SSL connection
 		props.setProperty("ENABLE-SSL", "true");
 
- 
-      props.setProperty(SslInfo.PROTOCOL, "TLSv1.2"); 
+
       
-      */
-		
+      // For Http connection  //
+	/*	
 		props.setProperty("SEAS-HOST", "9.109.116.190");
 		props.setProperty("SEAS-PORT", "61365");
+		
+		*/
+      
 		this.initialize(props);
 	
 	}
@@ -186,6 +186,7 @@ public class GetToken_SEAS {
 	 * create SEASApi using properties
 	 */
 	public GetToken_SEAS(Properties props) {
+		
 		this.initialize(props);
 	}
 
@@ -214,38 +215,40 @@ public class GetToken_SEAS {
 		SslInfo sslInfo = null;
 
 		
-		String enableSSL = props.getProperty("ENABLE-SSL", "false");
+		String enableSSL = props.getProperty("ENABLE-SSL", "true");
 		if (enableSSL != null && enableSSL.equalsIgnoreCase("true")) {
 			sslInfo = new SslInfo();
+			
+			
 
-			sslInfo.setKeyStoreType(props.getProperty(SslInfo.KEY_STORE_TYPE,
-					"JKS"));
+			sslInfo.setKeyStoreType(props.getProperty(SslInfo.KEY_STORE_TYPE,"JKS"));
 			sslInfo.setKeyStoreFile(props.getProperty(SslInfo.KEY_STORE_FILE));
-			sslInfo.setKeyStorePassword(props
-					.getProperty(SslInfo.KEY_STORE_PASSWORD));
+			sslInfo.setKeyStorePassword(props.getProperty(SslInfo.KEY_STORE_PASSWORD));
 			sslInfo.setClientAlias(props.getProperty(SslInfo.CLIENT_ALIAS));
-
-			sslInfo.setTrustStoreType(props.getProperty(
-					SslInfo.TRUST_STORE_TYPE, "JKS"));
-			sslInfo.setTrustStoreFile(props
-					.getProperty(SslInfo.TRUST_STORE_FILE));
-			sslInfo.setTrustStorePassword(props
-					.getProperty(SslInfo.TRUST_STORE_PASSWORD));
+			sslInfo.setTrustStoreType(props.getProperty(SslInfo.TRUST_STORE_TYPE, "JKS"));
+			sslInfo.setTrustStoreFile(props.getProperty(SslInfo.TRUST_STORE_FILE));
+			sslInfo.setTrustStorePassword(props.getProperty(SslInfo.TRUST_STORE_PASSWORD));
 
 			sslInfo.setProtocol(props.getProperty(SslInfo.PROTOCOL, "SSL_TLS"));
+			
 
 			String cipherString = props.getProperty(SslInfo.CIPHER_SUITES);
+			
+			
 			if (cipherString != null && cipherString.length() > 0) {
 				String ciphers[] = cipherString.split(" ");
 				if (ciphers != null && ciphers.length > 0) {
 					List<String> cipherSuites = new ArrayList<String>();
 					for (String cipher : ciphers) {
 						cipherSuites.add(cipher);
+						
 					}
 					sslInfo.setCipherSuites(cipherSuites);
+					
 				}
 			}
 			params.setSslInfo(sslInfo);
+			System.out.println("SSL Infor ->"+sslInfo.toString());
 		}
 	}
 
@@ -277,33 +280,30 @@ public class GetToken_SEAS {
 		// Send request to EA and get response...
 		String response = sendRequestReceiveResponse(xmlRequest);
 		
-		System.out.println("Response : " + response);
+		System.out.println("Response :"+response);
+		
+		
 
 		Message msg = new Message();
 		msg.parse(response);
 		String responseId = msg.getMsgID();
 		String responseMsg = msg.getMsgText();
 		
-		//System.out.println("response id :"+ responseId+ " ,\n ResponseMsg : " +responseMsg );
+		
 		
 		
 
 		String lmsg = null;
 		if (responseId != null && (responseId.equals(VALIDATE_TOKEN_RESPONSE) || responseId.endsWith("I"))) {
 			
-			System.out.println("Token : " +msg.getToken());
+			return (msg.getToken());
 			
-			return ('"'+msg.getToken()+'"');
 		} else {
 			if (responseMsg != null)
 				lmsg = responseMsg;
 			else
 				lmsg = "Could not authenticate user : " + userId;
-			
-			System.out.println(lmsg);
-			System.out.println("Invalid UserId or Password");
-			
-			return null;
+			throw new Exception(lmsg);
 		}
 	}
 
@@ -367,6 +367,7 @@ public class GetToken_SEAS {
 		//build an xml Request
 		String xmlRequest = buildInValidateSSOTokenRequest(token);	
 		String response = sendRequestReceiveResponse(xmlRequest);
+		System.out.println(response);
 		
 		Message msg = new Message();
 		msg.parse(response);
@@ -480,6 +481,7 @@ public class GetToken_SEAS {
 	 */
 	public void connect() throws Exception {
 		server.connect(params);
+	
 	}
 
 	/***
@@ -489,32 +491,9 @@ public class GetToken_SEAS {
 		server.disconnect();
 	}
 
-	public  String SEAS_Response(String user ,String password , String authProfile ) {
+	
+	
 
-		GetToken_SEAS sai = null;
-		String token=null;
-		try {
-			
-			sai = new GetToken_SEAS();
-	        sai.connect();
-		
-        
-			//authenticate and generate token
-			//String token = sai.requestSSOToken("iikonne", "Password01", "authProfile");
-	        token = sai.requestSSOToken(user, password, authProfile);
-			//boolean validated = sai.validateSSOToken(user, token, false);
-			//System.out.println("Validated : " + validated);
-			
-
-		} catch (Throwable t) {
-			t.printStackTrace();
-		} finally {
-			if (sai != null)
-				sai.disconnect();
-		}
-		return token;
-		
-		
-	}
+	
 
 }

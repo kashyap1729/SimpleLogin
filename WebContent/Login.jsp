@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <script src='https://www.google.com/recaptcha/api.js'></script>
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="JavaScript/JavaScript.js"></script>
 <script> 
 
